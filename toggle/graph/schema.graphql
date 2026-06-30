@@ -1,0 +1,51 @@
+# ─────────────────────────────────────────────────
+# schema.graphql
+#
+# This file IS the API contract in GraphQL.
+# In REST you had route declarations scattered across
+# router.go and handler signatures. Here, EVERYTHING
+# the client can do is declared in one place.
+# ─────────────────────────────────────────────────
+
+# The Book type mirrors our Go struct.
+# GraphQL uses its own type system: String, Int, Float, Boolean, ID.
+# The "!" means the field is NON-NULL (required / never nil).
+type Book {
+    id:         ID!
+    title:      String!
+    author:     String!
+    year:       Int!
+    price:      Float!
+    createdAt:  String!
+    updatedAt:  String!
+}
+
+# Input types are used for write operations (create / update).
+# This replaces the separate BookInput struct we had in models/book.go
+# for REST — in GraphQL the schema itself declares the input shape.
+input BookInput {
+    title:  String!
+    author: String!
+    year:   Int!
+    price:  Float!
+}
+
+# Query = READ operations.
+# In REST these were GET /books and GET /books/:id.
+# Here, the client picks WHICH query to call and asks for
+# ONLY the fields it actually needs — no more, no less.
+type Query {
+    books:        [Book!]!    # replaces GET /api/v1/books
+    book(id: ID!): Book       # replaces GET /api/v1/books/:id
+                              # returns null (no !) if not found
+}
+
+# Mutation = WRITE operations (Create, Update, Delete).
+# In REST these were POST, PUT, DELETE routes.
+# Each mutation returns the affected Book so the client
+# can update its local cache without a second request.
+type Mutation {
+    createBook(input: BookInput!): Book!           # replaces POST /api/v1/books
+    updateBook(id: ID!, input: BookInput!): Book   # replaces PUT  /api/v1/books/:id
+    deleteBook(id: ID!): Boolean!                  # replaces DELETE /api/v1/books/:id
+}

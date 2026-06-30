@@ -1,0 +1,57 @@
+# gqlgen.yml
+#
+# This file configures gqlgen, the most popular Go GraphQL code generator.
+# It reads your schema.graphql and generates:
+#   - graph/generated/generated.go   (the execution engine — never edit manually)
+#   - graph/model/models_gen.go      (Go structs matching your schema types)
+#
+# Run: go run github.com/99designs/gqlgen generate
+#
+# Why code generation?
+#   Our hand-written handler.go does what generated.go does, but manually.
+#   In a real project you use gqlgen to generate that boilerplate — it's
+#   faster, handles edge cases, and stays in sync with your schema automatically.
+#   When you change schema.graphql and re-run generate, your Go types update too.
+
+# The schema file gqlgen reads
+schema:
+  - graph/schema.graphql
+
+# Where to put the generated ExecutableSchema implementation
+exec:
+  filename: graph/generated/generated.go
+  package: generated
+
+# Where to put generated model structs
+# These mirror your schema types (Book, BookInput, etc.) as Go structs
+model:
+  filename: graph/model/models_gen.go
+  package: model
+
+# Where your resolver implementations live
+# gqlgen generates the interface; you implement it here
+resolver:
+  layout: follow-schema
+  dir: graph
+  package: graph
+  filename_template: "{name}.resolvers.go"
+
+# Bind schema types to your own Go structs instead of using generated ones.
+# This lets you reuse models/book.go across REST and GraphQL simultaneously.
+autobind:
+  - "github.com/yourname/gin-graphql-api/models"
+
+# Fine-grained type mapping
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+  # Uncomment when you add the DateTime scalar:
+  # DateTime:
+  #   model: github.com/yourname/gin-graphql-api/graph.DateTime
