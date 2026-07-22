@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fafafa;
+  color: #222;
+  margin: 0;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #999;
+}
+
+button {
+  background: #222;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #444;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #c0392b;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.link-button {
+  background: none;
+  color: #555;
+  border: none;
+  padding: 4px 0;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.link-button:hover {
+  background: none;
+  color: #222;
+}
+
+/* ---- Login / Register page ---- */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 32px;
+}
+
+.auth-card h1 {
+  font-size: 22px;
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  color: #777;
+  font-size: 14px;
+  margin: 0 0 20px 0;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-card > .link-button {
+  display: block;
+  margin: 12px auto 0 auto;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #aaa;
+  font-size: 12px;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.google-button-slot {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- Notes page ---- */
+
+.notes-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+
+.notes-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.notes-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.note-form textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+button.secondary {
+  background: #eee;
+  color: #333;
+}
+
+button.secondary:hover {
+  background: #ddd;
+}
+
+.notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #fff;
+}
+
+.note-title {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  word-break: break-word;
+}
+
+.note-content {
+  margin: 0 0 8px 0;
+  color: #555;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.note-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.note-actions button {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 13px;
+  padding: 0;
+}
+
+.note-actions button:hover {
+  color: #222;
+  background: none;
+  text-decoration: underline;
+}
+
+.empty {
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+}
