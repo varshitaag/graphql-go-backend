@@ -138,3 +138,52 @@ func (s *AuthService) issueToken(user *model.User) (*model.AuthPayload, error) {
 	}
 	return &model.AuthPayload{Token: token, User: user}, nil
 }
+
+func (s *AuthService) ResetPassword(ctx context.Context, userID string, oldPassword *string, newPassword string) (bool, error) {
+	currentHash, _, err := s.userRepo.GetPasswordDetails(ctx, userID)
+	if err != nil {
+		return false, err
+	}
+
+	newPassword = strings.TrimSpace(newPassword)
+	if len(newPassword) < 8 {
+		return false, apperrors.Invalid("password must be at least 8 characters")
+	}
+
+	if currentHash != "" {
+		// Non-Google login user (or user who already has a password set)
+		if oldPassword == nil || strings.TrimSpace(*oldPassword) == "" {
+			return false, apperrors.Invalid("old password is required")
+		}
+
+		trimmedOldPassword := strings.TrimSpace(*oldPassword)
+		// Check that the old password is correct
+		if err := bcrypt.CompareHashAndPassword([]byte(currentHash), []byte(trimmedOldPassword)); err != nil {
+			return false, apperrors.Unauthorized("incorrect old password")
+		}
+
+		// Check that new password is not the same as the old password (string comparison)
+		if newPassword == trimmedOldPassword {
+			return false, apperrors.Invalid("new password cannot be the same as the old password")
+		}
+
+		// Also double check via bcrypt in case the string comparison wasn't sufficient or to be absolutely secure
+		if err := bcrypt.CompareHashAndPassword([]byte(currentHash), []byte(newPassword)); err == nil {
+			return false, apperrors.Invalid("new password cannot be the same as the old password")
+		}
+	}
+
+	// Hash the new password
+	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return false, err
+	}
+
+	// Update the database
+	if err := s.userRepo.UpdatePasswordHash(ctx, userID, string(hash)); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+

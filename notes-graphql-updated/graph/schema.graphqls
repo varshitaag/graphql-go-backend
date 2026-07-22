@@ -39,6 +39,11 @@ input UpdateNoteInput {
   content: String
 }
 
+input ResetPasswordInput {
+  oldPassword: String
+  newPassword: String!
+}
+
 type Query {
   me: User
   notes: [Note!]!
@@ -49,7 +54,9 @@ type Mutation {
   register(input: RegisterInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
   loginWithGoogle(idToken: String!): AuthPayload!
+  resetPassword(input: ResetPasswordInput!): Boolean!
   createNote(input: NewNote!): Note!
   updateNote(id: ID!, input: UpdateNoteInput!): Note!
   deleteNote(id: ID!): Boolean!
 }
+

@@ -100,6 +100,26 @@ func (r *UserRepository) LinkGoogleID(ctx context.Context, userID, googleID stri
 	return err
 }
 
+// GetPasswordDetails retrieves the password hash and google_id for a given userID.
+func (r *UserRepository) GetPasswordDetails(ctx context.Context, userID string) (string, string, error) {
+	row := r.db.QueryRowContext(ctx, `
+		SELECT password_hash, google_id FROM users WHERE id = $1`, userID)
+	var passwordHash sql.NullString
+	var googleID sql.NullString
+	if err := row.Scan(&passwordHash, &googleID); err != nil {
+		return "", "", err
+	}
+	return passwordHash.String, googleID.String, nil
+}
+
+// UpdatePasswordHash updates the password hash for a given userID.
+func (r *UserRepository) UpdatePasswordHash(ctx context.Context, userID string, passwordHash string) error {
+	_, err := r.db.ExecContext(ctx, `
+		UPDATE users SET password_hash = $2 WHERE id = $1`, userID, passwordHash)
+	return err
+}
+
+
 func scanUser(row *sql.Row) (*model.User, error) {
 	var u model.User
 	var createdAt time.Time

@@ -3,6 +3,8 @@ package config
 import (
 	"errors"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -14,6 +16,8 @@ type Config struct {
 
 // Load reads config from environment variables, applying sensible defaults.
 func Load() (*Config, error) {
+	_ = godotenv.Load()
+
 	cfg := &Config{
 		Port:           getEnv("PORT", "8080"),
 		DatabaseURL:    os.Getenv("DATABASE_URL"),

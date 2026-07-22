@@ -26,6 +26,15 @@ func (r *mutationResolver) LoginWithGoogle(ctx context.Context, idToken string) 
 	return r.AuthService.LoginWithGoogle(ctx, idToken)
 }
 
+// ResetPassword is the resolver for the resetPassword field.
+func (r *mutationResolver) ResetPassword(ctx context.Context, input model.ResetPasswordInput) (bool, error) {
+	userID, ok := auth.UserIDFromContext(ctx)
+	if !ok {
+		return false, apperrors.Unauthorized("authentication required")
+	}
+	return r.AuthService.ResetPassword(ctx, userID, input.OldPassword, input.NewPassword)
+}
+
 // CreateNote is the resolver for the createNote field.
 func (r *mutationResolver) CreateNote(ctx context.Context, input model.NewNote) (*model.Note, error) {
 	userID, ok := auth.UserIDFromContext(ctx)

@@ -37,6 +37,11 @@ type RegisterInput struct {
 	Password string `json:"password"`
 }
 
+type ResetPasswordInput struct {
+	OldPassword *string `json:"oldPassword,omitempty"`
+	NewPassword string  `json:"newPassword"`
+}
+
 type UpdateNoteInput struct {
 	Title   *string `json:"title,omitempty"`
 	Content *string `json:"content,omitempty"`
